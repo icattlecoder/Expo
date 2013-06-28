@@ -1,0 +1,112 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>后台展会管理-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>	
+	<style>td{ height:22px; line-height:22px}</style>
+	<script type="text/javascript">
+		checkedvalues=[];
+		function getCheckedValues () {
+			// body...
+			checkedvaluess= []
+			$(".check").each(function() { 						
+						if($(this).attr("checked")){
+							checkedvalues.push($(this).attr("value"))							
+						}
+			}); 
+		}
+		$(function() { 
+			alt=true;			
+			$("#checkall").click(function() {						
+					$(".check").each(function() { 
+						$(this).attr("checked", alt); 						
+					}); 					
+				alt =! alt;	
+			}); 
+			//$("table").resizableColumns({});
+			//alert("dkl")
+
+		}); 
+			
+
+
+	</script>
+</head>
+<body>
+	<table width="100%" border="0" cellpadding="9" cellspacing="1" class="table" data-resizable-columns-id="demo-table">
+		<tr>
+			<td colspan="15" class="table_title">
+				<span class="fl">后台会展展商管理</span>	
+				<span class="fl" style="margin-left:100px;">
+					<a href="javascript:void(0)" onclick="getCheckedValues(); if(checkedvalues==0){return;} return confirmurl('{:U('/Admin/Company/batchdel/',array('eid'=>$eid,'p'=>$nowPage))}'+'/ids/'+checkedvalues,'确定删除选中的展商吗?')">批量删除</a> | 
+				</span>			
+				
+				<span class="fl">
+					<a href="{:U('/Admin/Company/batchadd/',array('eid'=>$eid))}">+ 批量导入</a>
+ 				| 
+				</span>
+				<span class="fl">
+					<a href="{:U('/Admin/Company/add/',array('eid'=>$eid))}">+ 添加展商</a>
+				 | 	
+				</span>
+			</td>
+			<tr class="list_head ct">
+				<td width="30"><input type="checkbox" id="checkall"/></td>
+				<td width="70">编号</td>
+				<td >公司名称</td>
+				<td width="150">展位</td>
+				<td width="100">展会</td>
+				<td width="100">电话</td>
+				<td width="100">类型</td>
+				<td width="100">传真</td>
+				<td width="70">联系人</td>
+				<td width="70">地址</td>
+				<td width="70">邮编</td>
+				<td width="70">E-mail</td>
+				<td width="70">网站</td>
+				<td width="70">图片</td>
+				<td width="100">操作</td>
+			</tr>
+	    <volist name="list" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td align='center'><input class="check" type="checkbox" name='checkname[]' value='{$vo.id}'/></td>
+				<td align='center'>{$vo.id}</td>
+				<td ><a href="javascript:setting_access({$vo.id}, '{$vo.name}')">{$vo.name}</a></td>
+				<td >{$vo.exposition}</td>
+				<td >{$expoName}</td>
+				<td align='center'>{$vo.phone}</td>			
+				<td >{$vo.type}</td>
+				<td >{$vo.fax}</td>
+				<td >{$vo.person}</td>
+				<td >{$vo.address}</td>
+				<td >{$vo.zipcode}</td>
+				<td >{$vo.email}</td>
+				<td >{$vo.website}</td>
+				<td >{$vo.pic}</td>				
+				<td align='center'>				
+					<a href="{:U('/Admin/Company/edit/',array('id'=>$vo['id']))}">修改</a>
+					| <eq name="vo.username" value="$Think.config.SPECIAL_USER"><font color="#cccccc">删除</font><else/><a href="javascript:void(0)" onclick="return confirmurl('{:U('/Admin/Company/del/',array('id'=>$vo['id'],'eid'=>$eid,'p'=>$nowPage))}','确定删除该展商吗?')">删除</a></eq>
+				</td>
+			</tr>
+	    </volist>
+		<tr class="tr">
+			<td colspan="1" class="pages"><input class="bginput" type="button" onclick="javascript:history.back(-1);" value="返 回" > 
+			 </td>	
+          <td colspan="14" class="pages">
+           {$page}
+          </td>
+        </tr>
+		</table>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+		<script type="text/javascript">
+		//权限设置
+			function setting_access(id, name) {
+				window.top.art.dialog.open('{:U('/Admin/Company/view/')}'+'/id/'+id,{title: name+'详细信息', width: 400, height: 300});
+			}
+		</script>
+</body>
+	</html>

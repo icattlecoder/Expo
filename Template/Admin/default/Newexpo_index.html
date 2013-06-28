@@ -1,0 +1,87 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<title>后台展会管理-{$Think.config.cms_name}</title>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+	<link rel='stylesheet' type='text/css' href='__PUBLIC__/Admin/css/admin_style.css' />
+	<script type="text/javascript" src="__PUBLIC__/js/jquery.min.js"></script>
+	<script type="text/javascript" src="__PUBLIC__/Admin/js/function.js"></script>
+	<style>td{ height:22px; line-height:22px}</style>
+	<script type="text/javascript">
+		checkedvalues=[];
+		function getCheckedValues () {
+			// body...
+			checkedvaluess = []
+			$(".check").each(function() { 						
+						if($(this).attr("checked")){
+							checkedvalues.push($(this).attr("value"))							
+						}						
+			}); 
+		}
+		$(function() { 
+			alt=true;			
+			$("#checkall").click(function() {						
+					$(".check").each(function() { 
+						$(this).attr("checked", alt); 						
+					}); 					
+				alt =! alt;	
+			}); 
+			
+			}); 
+			$("#batchdel").click(function () {
+				alert("hello")
+				// body...
+			});
+
+	</script>
+</head>
+<body>
+	<table width="100%" border="0" cellpadding="10" cellspacing="1" class="table">
+		<tr>
+			<td colspan="10" class="table_title">
+				<span class="fl">后台会展管理</span>
+				<span class="fr">
+					<a href="{:U('/Admin/Newexpo/add')}">+ 添加会展</a>
+				</span>
+				<span class="fr">
+					<a href="javascript:void(0)" onclick="getCheckedValues();return confirmurl('{:U('/Admin/Newexpo/batchdel/',array('id'=>$vo['id'],'p'=>$nowPage))}'+'/ids/'+checkedvalues,'确定删除选中的会展吗?')">批量删除</a>					
+				</span>
+			</td>
+			<tr class="list_head ct">
+				<td width="30"><input type="checkbox" id="checkall"/></td>
+				<td width="70">编号</td>
+				<td >名称</td>
+				<td width="150">地址</td>
+				<td width="100">展馆</td>				
+				<td width="150">时间</td>				
+				<td width="70">是否可以更新</td>
+				<td width="100">管理操作</td>
+			</tr>
+	    <volist name="list" id="vo">
+			<tr class='<eq name="mod" value="1">tr<else/>ji</eq>'>
+				<td align='center'><input class="check" type="checkbox" name='checkname[]' value='{$vo.id}'/></td>
+				<td align='center'>{$vo.id}</td>
+				<td >{$vo.name}</td>
+				<td >{$vo.addr}</td>
+				<td >{$vo.hall}</td>
+			
+				<td align='center'>
+					{$vo.start}-{$vo.end}</td>
+				<td align='center'><eq name="vo.allow_up" value="1"><font color="green">√</font><else/><font color="red">×</font></eq> 					
+				</td>			
+				<td align='center'>					
+					<a href="{:U('/Admin/Newexpo/edit/',array('id'=>$vo['id']))}">修改</a>
+					| <eq name="vo.username" value="$Think.config.SPECIAL_USER"><font color="#cccccc">删除</font><else/><a href="javascript:void(0)" onclick="return confirmurl('{:U('/Admin/Newexpo/del/',array('id'=>$vo['id']))}','确定删除该用户吗?')">删除</a></eq>
+				</td>
+			</tr>
+	    </volist>
+		<tr class="tr">
+          <td colspan="10" class="pages">
+            {$page}
+          </td>
+        </tr>
+		</table>
+		<script>var version='{$Think.config.cms_var}';</script>
+		<include file="Index:footer" />
+</body>
+	</html>
